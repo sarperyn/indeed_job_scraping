@@ -1,23 +1,28 @@
 from selenium import webdriver
-from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 from selenium.webdriver.remote.webdriver import WebDriver
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import NoSuchElementException
-import os
-import time
-import csv
-import pandas as pd
 from webdriver_manager.chrome import ChromeDriverManager
-from selenium.webdriver.chrome.options import Options
 from selenium.common.exceptions import NoSuchElementException
 from selenium.common.exceptions import StaleElementReferenceException
+import time
+import pandas as pd
 
-options = Options()
-options.add_argument("--disable-notifications")
+
+
+#For windows run this
+'''
+PATH = "YOUR OWN CHROMEDRIVER PATH"
+driver = webdriver.Chrome(PATH)
+'''
+#For mac run this
+
 driver = webdriver.Chrome(ChromeDriverManager().install())
 driver.get("https://ca.indeed.com/jobs?q=computer%20science%20internship&l=Toronto,%20ON&radius=25&ts=1630423938843&pts=1630353837882&rq=1&rsIdx=0")
+
+
 
 companies = []
 job_list = []
@@ -38,43 +43,25 @@ def get_page():
         main = WebDriverWait(driver,10).until(
             EC.presence_of_element_located((By.ID,"resultsBodyContent"))
         )
+
         # Get company names and job titles
         job_titles = main.find_elements_by_tag_name("h2")
         company_names = main.find_elements_by_class_name("companyName")
-        number_of_jobs_str = main.find_element_by_id("searchCountPages")
 
-        iter_num = 7
-
-        #job_title=[job_title.text for job_title in job_titles]
-        #companies = [company.text for company in company_names]
-
-            
+        #Add the data to each lists
         for i in range(len(job_titles)):
 
             job_titles[i].click()
             title = job_titles[i].text.replace('new\n','')
-            
             company = company_names[i].text
             time.sleep(1)
             vjs_desc = main.find_element_by_id("vjs-desc")
+
+
+
             job_desc_list.append(vjs_desc.text)
             job_list.append(title)
             companies.append(company)
-
-
-
-        '''
-        for title in job_titles:
-            print(title.text)
-            title = title.text.replace('new\n','')
-            job_list.append(title.text)
-
-        for company in company_names:
-    
-            company = company.text
-            companies.append(company)
-        '''
-        #job_list = [title.text.replace('new\n','') for title in job_titles]
 
     finally:
         pass
@@ -85,8 +72,6 @@ def main():
         EC.presence_of_element_located((By.ID,"resultsBodyContent"))
         )
 
-    #forward = main.find_elements_by_class_name("np")
-    #print("this is forward",forward[0])
 
     try:
         for i in range(6):
@@ -95,6 +80,8 @@ def main():
 
             get_page()
 
+
+            #Click the forward button
             if i == 0:
                 button = WebDriverWait(driver,10,ignored_exceptions=ignored_exceptions)\
                 .until(EC.presence_of_element_located((By.XPATH,'//*[@id="resultsCol"]/nav/div/ul/li[6]/a/span'))) 
@@ -102,7 +89,6 @@ def main():
                 button = WebDriverWait(driver,10,ignored_exceptions=ignored_exceptions)\
                     .until(EC.presence_of_element_located((By.XPATH,'//*[@id="resultsCol"]/nav/div/ul/li[7]/a/span')))
             
-            print("here",button)
             button.click()
             driver.refresh()
     
@@ -110,17 +96,16 @@ def main():
         pass
 
     finally:
+        '''
         print("Companies",len(companies))
         print("Job_list",len(job_list))
         print(len(job_desc_list))
+        '''
+        #Create the dataset
         df = create_df(companies,job_list,job_desc_list)
         df.to_csv("data_new.csv")
-        #time.sleep(3)
+
         driver.quit()
 
 
 main()
-
-#print(len(companies))
-#print(len(job_titles))
-#print(job_desc_list)
