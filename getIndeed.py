@@ -4,7 +4,7 @@ from selenium.webdriver.remote.webdriver import WebDriver
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import NoSuchElementException
-from webdriver_manager.chrome import ChromeDriverManager
+#from webdriver_manager.chrome import ChromeDriverManager
 from selenium.common.exceptions import NoSuchElementException
 from selenium.common.exceptions import StaleElementReferenceException
 import time
@@ -13,13 +13,13 @@ import pandas as pd
 
 
 #For windows run this
-'''
-PATH = "YOUR OWN CHROMEDRIVER PATH"
+
+PATH = "C:\Program Files (x86)\chromedriver.exe"
 driver = webdriver.Chrome(PATH)
-'''
+
 #For mac run this
 
-driver = webdriver.Chrome(ChromeDriverManager().install())
+#driver = webdriver.Chrome(ChromeDriverManager().install())
 driver.get("https://ca.indeed.com/jobs?q=computer%20science%20internship&l=Toronto,%20ON&radius=25&ts=1630423938843&pts=1630353837882&rq=1&rsIdx=0")
 
 
