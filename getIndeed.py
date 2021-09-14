@@ -17,8 +17,9 @@ import pandas as pd
 PATH = "YOUR OWN CHROMEDRIVER PATH"
 driver = webdriver.Chrome(PATH)
 '''
-#For mac run this
 
+
+#For mac run this
 driver = webdriver.Chrome(ChromeDriverManager().install())
 driver.get("https://ca.indeed.com/jobs?q=computer%20science%20internship&l=Toronto,%20ON&radius=25&ts=1630423938843&pts=1630353837882&rq=1&rsIdx=0")
 
