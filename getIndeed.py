@@ -14,7 +14,7 @@ import pandas as pd
 
 #For windows run this
 '''
-PATH = "YOUR OWN CHROMEDRIVER PATH"
+PATH = "C:\Program Files (x86)\chromedriver.exe"
 driver = webdriver.Chrome(PATH)
 '''
 
@@ -104,7 +104,7 @@ def main():
         '''
         #Create the dataset
         df = create_df(companies,job_list,job_desc_list)
-        df.to_csv("data_new.csv")
+        df.to_csv("data.csv")
 
         driver.quit()
 
