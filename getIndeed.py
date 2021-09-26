@@ -1,5 +1,4 @@
 from selenium import webdriver
-from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.remote.webdriver import WebDriver
 from selenium.webdriver.support.ui import WebDriverWait
@@ -7,8 +6,12 @@ from selenium.webdriver.support import expected_conditions as EC
 from webdriver_manager.chrome import ChromeDriverManager
 import time
 import pandas as pd
-import os
 
+
+# %%
+pd.__version__
+
+# %%
 
 
 #For windows run below
@@ -74,7 +77,7 @@ def get_page():
         job_titles[i].click()
         title = job_titles[i].text.replace('new\n','')
         company = company_names[i].text
-        time.sleep(1.5)
+        time.sleep(1)
         try:
             job_desc = main.find_element_by_id("vjs-desc")
             #print("try block",job_desc)
@@ -92,7 +95,7 @@ def get_page():
 def get_data():
 
     try:
-        for i in range(3):
+        for i in range(10):
             time.sleep(1)
             #ignored_exceptions = (NoSuchElementException,StaleElementReferenceException)
 
@@ -111,7 +114,6 @@ def get_data():
 
             button.click()
             driver.refresh()
-
     finally:
         #Create the dataset
         df = create_df(company_list,job_list,job_desc_list)
@@ -119,12 +121,9 @@ def get_data():
 
         if len(LOCATION) != 0:
             location_str = ''.join(x for x in LOCATION.title() if not x.isspace())
-            df.to_csv((f"{job_str}_{location_str}.csv"))
-        
-        else:
-            df.to_csv((f"{job_str}_.csv"))
 
-        #driver.quit()
+        df.to_csv((f"{job_str}_{location_str}.csv"),index=False)
+        driver.quit()
 
     
 go_indeed(JOB,LOCATION)
