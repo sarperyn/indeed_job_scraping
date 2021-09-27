@@ -3,30 +3,25 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.remote.webdriver import WebDriver
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from webdriver_manager.chrome import ChromeDriverManager
+from selenium.webdriver.common.keys import Keys
+#from webdriver_manager.chrome import ChromeDriverManager
 import time
 import pandas as pd
 
 
-# %%
-pd.__version__
-
-# %%
-
-
 #For windows run below
-'''
+
 PATH = "C:\Program Files (x86)\chromedriver.exe"
 driver = webdriver.Chrome(PATH)
 
-'''
 
 #For mac run below
+'''
 driver = webdriver.Chrome(ChromeDriverManager().install())
 #driver.get("https://ca.indeed.com/jobs?q=computer%20science%20internship&l=Toronto,%20ON&radius=25&ts=1630423938843&pts=1630353837882&rq=1&rsIdx=0")
-
-JOB = "machine learning intern"
-LOCATION = "ontario"
+'''
+JOB = "COMPUTER SCIENCE"
+LOCATION = "toronto"
 
 company_list = []
 job_list = []
@@ -40,12 +35,14 @@ def go_indeed(JOB,LOCATION):
     main = WebDriverWait(driver,10).until(
             EC.presence_of_element_located((By.ID,"ssrRoot"))
         )
-    
     text_input = main.find_element_by_id("text-input-what")
     text_input.send_keys(JOB)
+
     if len(LOCATION) != 0:
-            LOCATION_input = main.find_element_by_id('text-input-where')
-            LOCATION_input.send_keys(LOCATION)
+        location_input = main.find_element_by_id('text-input-where')
+        location_input.send_keys(Keys.CONTROL,'a')
+        location_input.send_keys(Keys.BACKSPACE)
+        location_input.send_keys(LOCATION)
     try:
         find_jobs = main.find_element_by_xpath('//*[@id="jobsearch"]/button')
     except:
@@ -104,11 +101,12 @@ def get_data():
             #Click the forward button
             if i == 0:
                 button = WebDriverWait(driver,10,)\
-                .until(EC.presence_of_element_located((By.XPATH,'//*[@id="resultsCol"]/nav/div/ul/li[6]/a/span'))) 
+                .until(EC.presence_of_element_located((By.CLASS_NAME,'np')))  
             else:
                 try:
+                    #EDIT HERE IF YOU HAVE PROBLEM SARPER (THE XPATH IS DIFFERENT)
                     button = WebDriverWait(driver,10,)\
-                        .until(EC.presence_of_element_located((By.XPATH,'//*[@id="resultsCol"]/nav/div/ul/li[7]/a/span')))
+                        .until(EC.presence_of_element_located((By.XPATH,'//*[@id="resultsCol"]/nav/div/ul/li[5]/a/span')))
                 except:
                     break
 
