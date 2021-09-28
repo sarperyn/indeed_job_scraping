@@ -4,29 +4,27 @@ from selenium.webdriver.remote.webdriver import WebDriver
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.keys import Keys
-#from webdriver_manager.chrome import ChromeDriverManager
+from webdriver_manager.chrome import ChromeDriverManager
 import time
 import pandas as pd
 
 
 #For windows run below
-
+'''
 PATH = "C:\Program Files (x86)\chromedriver.exe"
 driver = webdriver.Chrome(PATH)
-
+'''
 
 #For mac run below
-'''
 driver = webdriver.Chrome(ChromeDriverManager().install())
-#driver.get("https://ca.indeed.com/jobs?q=computer%20science%20internship&l=Toronto,%20ON&radius=25&ts=1630423938843&pts=1630353837882&rq=1&rsIdx=0")
-'''
-JOB = "COMPUTER SCIENCE"
-LOCATION = "toronto"
+
+
+JOB = "machine learning"
+LOCATION = "remote"
 
 company_list = []
 job_list = []
 job_desc_list = []
-
 
 
 def go_indeed(JOB,LOCATION):
@@ -48,7 +46,6 @@ def go_indeed(JOB,LOCATION):
     except:
         find_jobs = main.find_element_by_xpath('//*[@id="whatWhereFormId"]/div[3]/button')
         
-    
     find_jobs.click()
 
 def create_df(*args):
@@ -77,6 +74,7 @@ def get_page():
         time.sleep(1)
         try:
             job_desc = main.find_element_by_id("vjs-desc")
+            
             #print("try block",job_desc)
         except:
             iframe = driver.find_element_by_xpath('//*[@id="vjs-container-iframe"]')
@@ -121,7 +119,7 @@ def get_data():
             location_str = ''.join(x for x in LOCATION.title() if not x.isspace())
 
         df.to_csv((f"{job_str}_{location_str}.csv"),index=False)
-        driver.quit()
+        #driver.quit()
 
     
 go_indeed(JOB,LOCATION)
